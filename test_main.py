@@ -6,13 +6,13 @@ from config import Config
 import pages.order_page_step_1
 from pages.page_one_options import OPTIONS
 from pages.order_page_step_1 import StepOneDesktop
-
+from pages.order_page_step_2 import StepTwoDesktop
 
 def test_run(page: Page, browser: Browser,browser_type: BrowserType):
     page.goto(f"{Config.ROOT_ADDRESS}/business-card")
     expect(page).to_have_title(re.compile("Calendar builder"))
     step_one = StepOneDesktop(page)
-    step_one.print_type.set_print(print_type=OPTIONS.PRINT.DIGITAL)
+    # step_one.print_type.set_print(print_type=OPTIONS.PRINT.DIGITAL)
     # step_one.print_type.set_print(print_type=OPTIONS.PRINT.OFFSET)
     # step_one.print_type.set_print(print_type=OPTIONS.PRINT.DIGITAL)
     # step_one.material_3d.set_meterial_3d()
@@ -25,11 +25,16 @@ def test_run(page: Page, browser: Browser,browser_type: BrowserType):
     #     step_one.material_3d.set_foil_front(option)
     #     time.sleep(1)
     print('\n')
-    step_one.priceSelector.get_price_regular()
-    step_one.priceSelector.get_price_urgent()
-    step_one.priceSelector.get_ready_time_regular()
-    step_one.priceSelector.get_ready_time_urgent()
+    # step_one.priceSelector.get_price_regular()
+    # step_one.priceSelector.get_price_urgent()
+    # step_one.priceSelector.get_ready_time_regular()
+    # step_one.priceSelector.get_ready_time_urgent()
     step_one.priceSelector.select_regular()
+    step_one.confirmation_popup.confirm()
+
+    step_two = StepTwoDesktop(page)
+    step_two.order_details.get_details_list()
+    step_two.order_details.get_ready_date()
 
     time.sleep(2)
 

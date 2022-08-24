@@ -16,6 +16,7 @@ class StepOneDesktop:
 
         self.tooltip = Tooltip(self.page, self.desktop)
         self.priceSelector = PriceSelector(self.page, self.desktop)
+        self.confirmation_popup = ConfirmationPopup(self.page, self.desktop)
 
 
 class PrintType:
@@ -147,22 +148,26 @@ class PriceSelector:
 
     def get_ready_time_regular(self):
         ready_in_days = self.section_time_regular.locator('div[class^="price-selector_days"]').inner_text()
+        parsed_ready_in_days =ready_in_days.split()[0]
         ready_date = self.section_time_regular.locator('div[class^="price-selector_date"]').inner_text()
-        print(ready_in_days, ready_date)
+        parsed_ready_date = re.search(" (?<=Будет готово: ).*", ready_date)[0].strip()
+        return parsed_ready_in_days, parsed_ready_date
+
 
     def get_ready_time_urgent(self):
         ready_in_days = self.section_time_urgent.locator('div[class^="price-selector_days"]').inner_text()
+        parsed_ready_in_days =ready_in_days.split()[0]
         ready_date = self.section_time_urgent.locator('div[class^="price-selector_date"]').inner_text()
-        parsed_ready_in_days =
-        print(ready_in_days, ready_date)
+        parsed_ready_date = re.search(" (?<=Будет готово: ).*", ready_date)[0].strip()
+        return parsed_ready_in_days, parsed_ready_date
 
     def get_price_regular(self):
-        price = self.section_price_order_regular.locator('div[class^="price-selector_price"]').inner_text()
-        print(price)
+        price = self.section_price_order_regular.locator('div[class^="price-selector_price"]').inner_text().split()[0]
+        return int(price)
 
     def get_price_urgent(self):
-        price = self.section_price_order_urgent.locator('div[class^="price-selector_price"]').inner_text()
-        print(price)
+        price = self.section_price_order_urgent.locator('div[class^="price-selector_price"]').inner_text().split()[0]
+        return int(price)
 
     def select_regular(self):
         self.section_price_order_regular.locator('button').click()
@@ -192,6 +197,9 @@ class ConfirmationPopup:
     def __init__(self, page, desktop):
         self.page = page
         self.desktop = desktop
+
+    def confirm(self):
+        self.page.locator("text='Далее'").click()
 
 class StepOneMobile:
     pass
