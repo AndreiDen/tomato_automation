@@ -17,8 +17,7 @@ PRINT_TYPE_OFFSET = OPTIONS.PRINT.OFFSET
 MATERIAL = OPTIONS.MATERIAL.MELOVAN
 
 
-def test_layout_90_valid(page: Page, browser: Browser, browser_type: BrowserType):
-    # SIZE_85 = OPTIONS.SIZE.EIGHTY_FIVE
+def test_layout_90_valid_vertical(page: Page, browser: Browser, browser_type: BrowserType):
     SIZE_90 = OPTIONS.SIZE.NINETY
     FULL_COLOR_BOTH_SIDES = OPTIONS.FULL_COLOR_PRINT.TWO_SIDED
     print('n')
