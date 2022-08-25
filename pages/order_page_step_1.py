@@ -2,6 +2,7 @@ from pages.page_one_options import OPTIONS
 from playwright.sync_api import Page
 import re
 
+
 class StepOneDesktop:
     def __init__(self, page):
         self.page: Page = page
@@ -20,15 +21,14 @@ class StepOneDesktop:
 
 
 class PrintType:
-    # OFFSET_PRINT_BUTTON = "//button[text()[contains(.,'Офсетная печать')]]"
-    # DIGITAL_PRINT_BUTTON = "//button[text()[contains(.,'Цифровая печать')]]"
-
     def __init__(self, page, desktop):
         self.page = page
         self.desktop = desktop
 
-    def set_print(self, print_type: OPTIONS.PRINT):
-        self.desktop.locator(f'text={print_type}').click()
+    def set_print_type(self, print_type: OPTIONS.PRINT):
+        # locator = self.desktop.locator()
+        # self.desktop.locator(f'text={print_type}').click()
+        self.desktop.locator(f"//button[text()[contains(.,'{print_type}')]]").click()
 
 
 class Lamination:
@@ -58,10 +58,15 @@ class SharedOptions:
         self.desktop.locator(f'text={full_color_sides}').click()
 
     def set_rounding(self, rounding: OPTIONS.ROUNDING):
-        self.desktop.locator(f'text={rounding}').click()
+        self.desktop.locator(f"//button[text()='{rounding}']").click()
+
+        # self.desktop.locator(f'text={rounding}').click()
 
     def set_quantity(self, quantity: OPTIONS.QUANTITY):
-        self.desktop.locator(f'text={quantity}').click()
+        pricing_locator = self.desktop.locator("//div[contains(@class, 'pricing_whideSelector')]")
+        # pricing_locator.locator(f'text={quantity}').click()
+        pricing_locator.locator(f"//button[text()='{quantity}']").click()
+
 
     def set_lamination_type(self, lamination_type: OPTIONS.LAMINATION_TYPE):
         self.desktop.locator(f'text={lamination_type}').click()
@@ -137,43 +142,42 @@ class PriceSelector:
     def __init__(self, page, desktop):
         self.page = page
         self.desktop = desktop
-        self.section_time_regular = self.desktop.locator(
+        self.section_time_first = self.desktop.locator(
             "//div[contains(@class, 'price-selector_wrapper')]/div[3]")
-        self.section_time_urgent = self.desktop.locator(
+        self.section_time_second = self.desktop.locator(
             "//div[contains(@class, 'price-selector_wrapper')]/div[5]")
-        self.section_price_order_regular = self.desktop.locator(
+        self.section_price_order_first = self.desktop.locator(
             "//div[contains(@class, 'price-selector_wrapper')]/div[4]")
-        self.section_price_order_urgent = self.desktop.locator(
+        self.section_price_order_second = self.desktop.locator(
             "//div[contains(@class, 'price-selector_wrapper')]/div[6]")
 
-    def get_ready_time_regular(self):
-        ready_in_days = self.section_time_regular.locator('div[class^="price-selector_days"]').inner_text()
+    def get_ready_time_first(self):
+        ready_in_days = self.section_time_first.locator('div[class^="price-selector_days"]').inner_text()
         parsed_ready_in_days =ready_in_days.split()[0]
-        ready_date = self.section_time_regular.locator('div[class^="price-selector_date"]').inner_text()
+        ready_date = self.section_time_first.locator('div[class^="price-selector_date"]').inner_text()
         parsed_ready_date = re.search(" (?<=Будет готово: ).*", ready_date)[0].strip()
         return parsed_ready_in_days, parsed_ready_date
 
-
-    def get_ready_time_urgent(self):
-        ready_in_days = self.section_time_urgent.locator('div[class^="price-selector_days"]').inner_text()
+    def get_ready_time_second(self):
+        ready_in_days = self.section_time_second.locator('div[class^="price-selector_days"]').inner_text()
         parsed_ready_in_days =ready_in_days.split()[0]
-        ready_date = self.section_time_urgent.locator('div[class^="price-selector_date"]').inner_text()
+        ready_date = self.section_time_second.locator('div[class^="price-selector_date"]').inner_text()
         parsed_ready_date = re.search(" (?<=Будет готово: ).*", ready_date)[0].strip()
         return parsed_ready_in_days, parsed_ready_date
 
-    def get_price_regular(self):
-        price = self.section_price_order_regular.locator('div[class^="price-selector_price"]').inner_text().split()[0]
+    def get_price_first(self):
+        price = self.section_price_order_first.locator('div[class^="price-selector_price"]').inner_text().split()[0]
         return int(price)
 
-    def get_price_urgent(self):
-        price = self.section_price_order_urgent.locator('div[class^="price-selector_price"]').inner_text().split()[0]
+    def get_price_second(self):
+        price = self.section_price_order_second.locator('div[class^="price-selector_price"]').inner_text().split()[0]
         return int(price)
 
-    def select_regular(self):
-        self.section_price_order_regular.locator('button').click()
+    def select_term_first(self):
+        self.section_price_order_first.locator('button').click()
 
-    def select_urgent(self):
-        self.section_price_order_urgent.locator('button').click()
+    def select_term_second(self):
+        self.section_price_order_second.locator('button').click()
 
 
 class Tooltip:

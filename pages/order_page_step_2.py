@@ -22,4 +22,8 @@ class OrderDetails:
         date_element = self.page.locator("//div[starts-with(@class, 'template-info_readyAt')]")
         text_date = date_element.text_content()
         day_name, date = re.search("(?<=Будет готово: )(\w+)(.*)", text_date).groups()
-        print(day_name, date)
+        date = date.split()
+        return day_name, date
+
+    def get_price(self):
+        pass
