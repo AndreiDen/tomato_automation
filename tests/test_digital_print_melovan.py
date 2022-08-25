@@ -64,6 +64,8 @@ def test_digital_melovan_regular(page: Page, browser: Browser, browser_type: Bro
     assert (ready_day == 'вторник')
     assert (ready_date == ['30', 'августа'])
 
+    price = step_two.order_details.get_price()
+    assert (price == 1973)
 
 def test_digital_melovan_urgent(page: Page, browser: Browser, browser_type: BrowserType):
     SIZE_85 = OPTIONS.SIZE.EIGHTY_FIVE
@@ -115,3 +117,6 @@ def test_digital_melovan_urgent(page: Page, browser: Browser, browser_type: Brow
     ready_day, ready_date = step_two.order_details.get_ready_date()
     assert (ready_day == 'пятница')
     assert (ready_date == ['26', 'августа'])
+
+    price = step_two.order_details.get_price()
+    assert (price == 3947)

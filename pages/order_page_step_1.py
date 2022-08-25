@@ -52,21 +52,17 @@ class SharedOptions:
         self.desktop = desktop
 
     def set_size(self, size: OPTIONS.SIZE):
-        self.desktop.locator(f'text={size}').click()
+        self.desktop.locator(f"//button[text()='{size}']").click()
 
     def set_full_color_sides(self, full_color_sides: OPTIONS.FULL_COLOR_PRINT):
-        self.desktop.locator(f'text={full_color_sides}').click()
+        self.desktop.locator(f"//button[text()='{full_color_sides}']").click()
 
     def set_rounding(self, rounding: OPTIONS.ROUNDING):
         self.desktop.locator(f"//button[text()='{rounding}']").click()
 
-        # self.desktop.locator(f'text={rounding}').click()
-
     def set_quantity(self, quantity: OPTIONS.QUANTITY):
         pricing_locator = self.desktop.locator("//div[contains(@class, 'pricing_whideSelector')]")
-        # pricing_locator.locator(f'text={quantity}').click()
         pricing_locator.locator(f"//button[text()='{quantity}']").click()
-
 
     def set_lamination_type(self, lamination_type: OPTIONS.LAMINATION_TYPE):
         self.desktop.locator(f'text={lamination_type}').click()
